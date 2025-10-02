@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../widgets/players_list.dart';
+import 'add_player_screen.dart';
 
 class AllPlayersScreen extends StatelessWidget {
   const AllPlayersScreen({super.key});
@@ -24,15 +26,17 @@ class AllPlayersScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
             padding: const EdgeInsets.all(10.0),
             onPressed: () {
-              // Add your logic for the "+" button here
-              print('Add button pressed');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AddPlayerScreen(),
+                ),
+              );
             },
           ),
         ],
       ),
-      body: const Center(
-        child: Text('List of all players will be displayed here.'),
-      ),
+      body: PlayersList(),
     );
   }
 }
