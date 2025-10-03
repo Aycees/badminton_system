@@ -1,34 +1,36 @@
 class PlayerItem {
   final String nickname;
   final String fullName;
+  final String contactNumber;
+  final String email;
+  final String address;
+  final String remarks;
   final String levelStart;
   final String levelEnd;
 
   const PlayerItem({
     required this.nickname,
     required this.fullName,
+    required this.contactNumber,
+    required this.email,
+    required this.address,
+    required this.remarks,
     required this.levelStart,
     required this.levelEnd,
   });
 
-  static List<PlayerItem> dummyPlayers = [
+  // Main array to store all players
+  static List<PlayerItem> playerList = [
+    // Initial dummy data
     const PlayerItem(
       nickname: 'Ace',
-      fullName: 'John Doe',
-      levelStart: 'Level F (Mid)',
-      levelEnd: 'Level F (Strong)',
-    ),
-    const PlayerItem(
-      nickname: 'Smash',
-      fullName: 'Jane Smith',
-      levelStart: 'Level E (Weak)',
-      levelEnd: 'Level E (Strong)',
-    ),
-    const PlayerItem(
-      nickname: 'NetMaster',
-      fullName: 'Alice Brown',
-      levelStart: 'Level D (Mid)',
-      levelEnd: 'Level D (Strong)',
+      fullName: 'Alice Johnson',
+      contactNumber: '123-456-7890',
+      email: 'alice@gmail.com',
+      address: '123 Main St, Cityville',
+      remarks: 'Top player',
+      levelStart: 'Beginner',
+      levelEnd: 'Intermediate',
     ),
   ];
 }

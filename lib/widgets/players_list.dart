@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import '../models/player_item.dart';
 
-class PlayersList extends StatelessWidget {
+class PlayersList extends StatefulWidget {
   const PlayersList({super.key});
 
   @override
+  State<PlayersList> createState() => _PlayersListState();
+}
+
+class _PlayersListState extends State<PlayersList> {
+  @override
   Widget build(BuildContext context) {
-    final players = [];
+    final players = PlayerItem.playerList;
     if (players.isEmpty) {
       return const Center(
         child: Text('No players available.'),

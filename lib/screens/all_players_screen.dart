@@ -11,7 +11,7 @@ class AllPlayersScreen extends StatefulWidget {
 }
 
 class _AllPlayersScreenState extends State<AllPlayersScreen> {
-  final List<PlayerItem> players = PlayerItem.dummyPlayers;
+  final List<PlayerItem> players = PlayerItem.playerList;
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +35,18 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
             icon: const Icon(Icons.add),
             padding: const EdgeInsets.all(10.0),
             onPressed: () async {
-              final newPlayer = await Navigator.push<PlayerItem>(
+              await Navigator.push<PlayerItem>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddPlayerScreen(),
+                  builder: (context) => AddPlayerScreen(),
                 ),
               );
+              setState(() {}); // Refresh the list
             },
           ),
         ],
       ),
-      body: const PlayersList(),
+      body: PlayersList(),
     );
   }
 }
