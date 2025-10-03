@@ -29,8 +29,8 @@ class PlayerItem {
       email: 'alice@gmail.com',
       address: '123 Main St, Cityville',
       remarks: 'Top player',
-      levelStart: 'Beginner',
-      levelEnd: 'Intermediate',
+      levelStart: 'Beginner (Weak)',
+      levelEnd: 'Intermediate (Strong)',
     ),
   ];
 }

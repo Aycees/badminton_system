@@ -93,21 +93,29 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
       bool valid = true;
       setState(() {
         _error['nickname'] = nicknameController.text.trim().isEmpty
-            ? 'Required'
+            ? 'Nickname Required'
             : null;
         _error['fullName'] = fullNameController.text.trim().isEmpty
-            ? 'Required'
+            ? 'Fullname Required'
             : null;
         _error['contactNumber'] = contactNumberController.text.trim().isEmpty
-            ? 'Required'
+            ? 'Contact Number Required'
             : null;
         _error['email'] = emailController.text.trim().isEmpty
-            ? 'Required'
+            ? 'Email Required'
             : null;
         _error['address'] = addressController.text.trim().isEmpty
-            ? 'Required'
+            ? 'Address Required'
             : null;
       });
+      final contact = contactNumberController.text.trim();
+      if (contact.isEmpty) {
+        _error['contactNumber'] = 'Contact Number Required';
+      } else if (!RegExp(r'^\d+$').hasMatch(contact)) {
+        _error['contactNumber'] = 'Numbers only';
+      } else {
+        _error['contactNumber'] = null;
+      }
       for (final v in _error.values) {
         if (v != null) valid = false;
       }
