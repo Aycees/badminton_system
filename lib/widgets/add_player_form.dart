@@ -1,7 +1,59 @@
 import 'package:flutter/material.dart';
 
-class AddPlayerInput extends StatelessWidget {
-  const AddPlayerInput({super.key});
+const badmintonLevels = [
+  {
+    'label': 'Beginner',
+    'marks': ['Weak', 'Mid', 'Strong'],
+  },
+  {
+    'label': 'Intermediate',
+    'marks': ['Weak', 'Mid', 'Strong'],
+  },
+  {
+    'label': 'Level G',
+    'marks': ['Weak', 'Mid', 'Strong'],
+  },
+  {
+    'label': 'Level F',
+    'marks': ['Weak', 'Mid', 'Strong'],
+  },
+  {
+    'label': 'Level E',
+    'marks': ['Weak', 'Mid', 'Strong'],
+  },
+  {
+    'label': 'Level D',
+    'marks': ['Weak', 'Mid', 'Strong'],
+  },
+  {
+    'label': 'Open',
+    'marks': [],
+  },
+];
+
+class AddPlayerForm extends StatefulWidget {
+  const AddPlayerForm({super.key});
+
+  @override
+  State<AddPlayerForm> createState() => _AddPlayerFormState();
+}
+
+class _AddPlayerFormState extends State<AddPlayerForm> {
+  RangeValues sliderValues = const RangeValues(0, 20);
+
+  String getLevelLabel(double value) {
+    int idx = value ~/ 3;
+    int markIdx = value % 3 == 0
+        ? 0
+        : value % 3 == 1
+        ? 1
+        : 2;
+    final level = badmintonLevels[idx];
+    final marks = (level['marks'] as List).cast<String>();
+    // For Open, no marks
+    if (marks.isEmpty) return level['label'] as String;
+    return '${level['label']} (${marks[markIdx]})';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +98,40 @@ class AddPlayerInput extends StatelessWidget {
             prefixIcon: Icon(Icons.notes),
           ),
           maxLines: 3,
+        ),
+        const SizedBox(height: 20),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Skill Level',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            RangeSlider(
+              min: 0,
+              max: 20,
+              divisions: 20,
+              labels: RangeLabels(
+                getLevelLabel(sliderValues.start),
+                getLevelLabel(sliderValues.end),
+              ),
+              values: sliderValues,
+              onChanged: (values) {
+                setState(() {
+                  sliderValues = values;
+                });
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(
+                'Selected: ${getLevelLabel(sliderValues.start)} to ${getLevelLabel(sliderValues.end)}',
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
         ),
         const SizedBox(height: 20),
         Column(

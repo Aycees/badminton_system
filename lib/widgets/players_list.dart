@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
+import '../models/player_item.dart';
 
 class PlayersList extends StatelessWidget {
-  PlayersList({super.key});
-
-  final List<String> players = [
-    'Player 1',
-    'Player 2',
-    'Player 3',
-    'Player 4',
-    'Player 5',
-  ];
+  const PlayersList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final players = PlayerItem.dummyPlayers;
     return ListView.builder(
       itemCount: players.length,
       itemBuilder: (context, index) {
+        final player = players[index];
         return ListTile(
-          title: Text(players[index]),
+          leading: const Icon(Icons.person),
+          title: Text(player.nickname),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(player.fullName),
+              Text(
+                'Level: ${player.levelStart} to ${player.levelEnd}',
+                style: const TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
         );
       },
     );

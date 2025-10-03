@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import '../models/player_item.dart';
 import '../widgets/players_list.dart';
 import 'add_player_screen.dart';
 
-class AllPlayersScreen extends StatelessWidget {
+class AllPlayersScreen extends StatefulWidget {
   const AllPlayersScreen({super.key});
+
+  @override
+  State<AllPlayersScreen> createState() => _AllPlayersScreenState();
+}
+
+class _AllPlayersScreenState extends State<AllPlayersScreen> {
+  final List<PlayerItem> players = PlayerItem.dummyPlayers;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple[100],
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -25,8 +34,8 @@ class AllPlayersScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             padding: const EdgeInsets.all(10.0),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final newPlayer = await Navigator.push<PlayerItem>(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AddPlayerScreen(),
@@ -36,7 +45,7 @@ class AllPlayersScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: PlayersList(),
+      body: const PlayersList(),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:badminton_system/widgets/add_player_input.dart';
+import 'package:badminton_system/widgets/add_player_form.dart';
 import 'package:flutter/material.dart';
 
 class AddPlayerScreen extends StatelessWidget {
@@ -12,7 +12,7 @@ class AddPlayerScreen extends StatelessWidget {
       ),
       body: const Padding(
         padding: EdgeInsets.all(16.0),
-        child: AddPlayerInput(),
+        child: AddPlayerForm(),
       ),
     );
   }
