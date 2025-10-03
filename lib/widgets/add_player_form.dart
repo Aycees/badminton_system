@@ -47,6 +47,7 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController remarksController = TextEditingController();
+  final _error = <String, String?>{};
 
   String getLevelLabel(double value) {
     int idx = value ~/ 3;
@@ -88,43 +89,73 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
       PlayerItem.playerList.add(newPlayer);
     }
 
+    bool validateFields() {
+      bool valid = true;
+      setState(() {
+        _error['nickname'] = nicknameController.text.trim().isEmpty
+            ? 'Required'
+            : null;
+        _error['fullName'] = fullNameController.text.trim().isEmpty
+            ? 'Required'
+            : null;
+        _error['contactNumber'] = contactNumberController.text.trim().isEmpty
+            ? 'Required'
+            : null;
+        _error['email'] = emailController.text.trim().isEmpty
+            ? 'Required'
+            : null;
+        _error['address'] = addressController.text.trim().isEmpty
+            ? 'Required'
+            : null;
+      });
+      for (final v in _error.values) {
+        if (v != null) valid = false;
+      }
+      return valid;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
           controller: nicknameController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Nickname',
-            prefixIcon: Icon(Icons.person),
+            prefixIcon: const Icon(Icons.person),
+            errorText: _error['nickname'],
           ),
         ),
         TextField(
           controller: fullNameController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Full Name',
-            prefixIcon: Icon(Icons.badge),
+            prefixIcon: const Icon(Icons.badge),
+            errorText: _error['fullName'],
           ),
         ),
         TextField(
           controller: contactNumberController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Contact Number',
-            prefixIcon: Icon(Icons.phone),
+            prefixIcon: const Icon(Icons.phone),
+            errorText: _error['contactNumber'],
           ),
         ),
         TextField(
           controller: emailController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Email',
-            prefixIcon: Icon(Icons.email),
+            prefixIcon: const Icon(Icons.email),
+            errorText: _error['email'],
           ),
           keyboardType: TextInputType.emailAddress,
         ),
         TextField(
           controller: addressController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Address',
-            prefixIcon: Icon(Icons.home),
+            prefixIcon: const Icon(Icons.home),
+            errorText: _error['address'],
           ),
           maxLines: 3,
         ),
@@ -177,22 +208,26 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  savePlayer(
-                    nickname: nicknameController.text,
-                    fullName: fullNameController.text,
-                    contactNumber: contactNumberController.text,
-                    email: emailController.text,
-                    address: addressController.text,
-                    remarks: remarksController.text,
-                    levelStart: getLevelLabel(sliderValues.start),
-                    levelEnd: getLevelLabel(sliderValues.end),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Player saved: ${nicknameController.text}'),
-                    ),
-                  );
-                  Navigator.pop(context);
+                  if (validateFields()) {
+                    savePlayer(
+                      nickname: nicknameController.text,
+                      fullName: fullNameController.text,
+                      contactNumber: contactNumberController.text,
+                      email: emailController.text,
+                      address: addressController.text,
+                      remarks: remarksController.text,
+                      levelStart: getLevelLabel(sliderValues.start),
+                      levelEnd: getLevelLabel(sliderValues.end),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Player saved: ${nicknameController.text}',
+                        ),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[300],
