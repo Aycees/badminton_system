@@ -182,23 +182,33 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
                   prefixIcon: field['icon'] as Widget,
                   errorText: field['error'] as String?,
                   filled: true,
-                  fillColor: Colors.grey[100],
+                  fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                      width: 1.2,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
                     borderSide: const BorderSide(
                       color: Colors.blueAccent,
-                      width: 1.5,
+                      width: 2.0,
                     ),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
                     borderSide: const BorderSide(
                       color: Colors.redAccent,
-                      width: 1.5,
+                      width: 2.0,
+                    ),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(
+                      color: Colors.redAccent,
+                      width: 2.0,
                     ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
