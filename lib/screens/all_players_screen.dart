@@ -29,6 +29,21 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
     });
   }
 
+  void deletePlayer(PlayerItem player) {
+    setState(() {
+      players.remove(player);
+      searchPlayers(); // Refresh the filtered list
+    });
+
+    // Show a snackbar confirmation
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${player.nickname} has been deleted'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -112,7 +127,12 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
               enabled: true,
             ),
           ),
-          Expanded(child: PlayersList(players: filteredPlayers)),
+          Expanded(
+            child: PlayersList(
+              players: filteredPlayers,
+              onPlayerDeleted: deletePlayer,
+            ),
+          ),
         ],
       ),
     );
