@@ -21,7 +21,6 @@ class PlayerItem {
 
   // Main array to store all players
   static List<PlayerItem> playerList = [
-    // Initial dummy data
     const PlayerItem(
       nickname: 'Ace',
       fullName: 'Alice Johnson',
@@ -31,6 +30,26 @@ class PlayerItem {
       remarks: 'Top player',
       levelStart: 'Beginner (Weak)',
       levelEnd: 'Intermediate (Strong)',
+    ),
+    const PlayerItem(
+      nickname: 'Smash',
+      fullName: 'Bob Smith',
+      contactNumber: '987-654-3210',
+      email: 'bob.smith@email.com',
+      address: '456 Elm St, Townsville',
+      remarks: 'Aggressive style',
+      levelStart: 'Level D (Mid)',
+      levelEnd: 'Level C (Strong)',
+    ),
+    const PlayerItem(
+      nickname: 'Drop',
+      fullName: 'Carol Lee',
+      contactNumber: '555-123-4567',
+      email: 'carol.lee@email.com',
+      address: '789 Oak Ave, Villagetown',
+      remarks: 'Consistent performer',
+      levelStart: 'Level F (Weak)',
+      levelEnd: 'Level E (Mid)',
     ),
   ];
 }

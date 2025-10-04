@@ -125,55 +125,92 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextField(
-          controller: nicknameController,
-          decoration: InputDecoration(
-            labelText: 'Nickname',
-            prefixIcon: const Icon(Icons.person),
-            errorText: _error['nickname'],
+        ...[
+          {
+            'controller': nicknameController,
+            'label': 'Nickname',
+            'icon': const Icon(Icons.person),
+            'error': _error['nickname'],
+            'maxLines': 1,
+          },
+          {
+            'controller': fullNameController,
+            'label': 'Full Name',
+            'icon': const Icon(Icons.badge),
+            'error': _error['fullName'],
+            'maxLines': 1,
+          },
+          {
+            'controller': contactNumberController,
+            'label': 'Contact Number',
+            'icon': const Icon(Icons.phone),
+            'error': _error['contactNumber'],
+            'maxLines': 1,
+          },
+          {
+            'controller': emailController,
+            'label': 'Email',
+            'icon': const Icon(Icons.email),
+            'error': _error['email'],
+            'maxLines': 1,
+            'keyboardType': TextInputType.emailAddress,
+          },
+          {
+            'controller': addressController,
+            'label': 'Address',
+            'icon': const Icon(Icons.home),
+            'error': _error['address'],
+            'maxLines': 3,
+          },
+          {
+            'controller': remarksController,
+            'label': 'Remarks',
+            'icon': const Icon(Icons.notes),
+            'error': null,
+            'maxLines': 3,
+          },
+        ].map(
+          (field) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7.0),
+            child: Material(
+              elevation: 1,
+              borderRadius: BorderRadius.circular(14),
+              child: TextField(
+                controller: field['controller'] as TextEditingController,
+                decoration: InputDecoration(
+                  labelText: field['label'] as String,
+                  prefixIcon: field['icon'] as Widget,
+                  errorText: field['error'] as String?,
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(
+                      color: Colors.blueAccent,
+                      width: 1.5,
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(
+                      color: Colors.redAccent,
+                      width: 1.5,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 16,
+                  ),
+                ),
+                maxLines: field['maxLines'] as int,
+                keyboardType: field['keyboardType'] as TextInputType?,
+              ),
+            ),
           ),
-        ),
-        TextField(
-          controller: fullNameController,
-          decoration: InputDecoration(
-            labelText: 'Full Name',
-            prefixIcon: const Icon(Icons.badge),
-            errorText: _error['fullName'],
-          ),
-        ),
-        TextField(
-          controller: contactNumberController,
-          decoration: InputDecoration(
-            labelText: 'Contact Number',
-            prefixIcon: const Icon(Icons.phone),
-            errorText: _error['contactNumber'],
-          ),
-        ),
-        TextField(
-          controller: emailController,
-          decoration: InputDecoration(
-            labelText: 'Email',
-            prefixIcon: const Icon(Icons.email),
-            errorText: _error['email'],
-          ),
-          keyboardType: TextInputType.emailAddress,
-        ),
-        TextField(
-          controller: addressController,
-          decoration: InputDecoration(
-            labelText: 'Address',
-            prefixIcon: const Icon(Icons.home),
-            errorText: _error['address'],
-          ),
-          maxLines: 3,
-        ),
-        TextField(
-          controller: remarksController,
-          decoration: const InputDecoration(
-            labelText: 'Remarks',
-            prefixIcon: Icon(Icons.notes),
-          ),
-          maxLines: 3,
         ),
         const SizedBox(height: 20),
         Column(
