@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/player_item.dart';
 import '../widgets/players_list.dart';
 import 'add_player_screen.dart';
+import 'edit_player_screen.dart';
 
 class AllPlayersScreen extends StatefulWidget {
   const AllPlayersScreen({super.key});
@@ -40,6 +41,23 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
       SnackBar(
         content: Text('${player.nickname} has been deleted'),
         duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void editPlayer(PlayerItem player) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPlayerScreen(
+          player: player,
+          onPlayerUpdated: (updatedPlayer) {
+            setState(() {
+              searchPlayers(); // Refresh the filtered list
+            });
+          },
+          onPlayerDeleted: deletePlayer,
+        ),
       ),
     );
   }
@@ -131,6 +149,7 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
             child: PlayersList(
               players: filteredPlayers,
               onPlayerDeleted: deletePlayer,
+              onPlayerTapped: editPlayer,
             ),
           ),
         ],

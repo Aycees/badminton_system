@@ -4,11 +4,13 @@ import '../models/player_item.dart';
 class PlayersList extends StatefulWidget {
   final List<PlayerItem> players;
   final Function(PlayerItem) onPlayerDeleted;
+  final Function(PlayerItem) onPlayerTapped;
 
   const PlayersList({
     super.key,
     required this.players,
     required this.onPlayerDeleted,
+    required this.onPlayerTapped,
   });
 
   @override
@@ -90,6 +92,7 @@ class _PlayersListState extends State<PlayersList> {
                 horizontal: 14,
                 vertical: 8,
               ),
+              onTap: () => widget.onPlayerTapped(player),
               leading: const CircleAvatar(
                 radius: 18,
                 backgroundColor: Colors.blueAccent,
