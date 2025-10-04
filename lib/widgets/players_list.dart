@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../models/player_item.dart';
 
 class PlayersList extends StatefulWidget {
-  const PlayersList({super.key});
+  final List<PlayerItem> players;
+
+  const PlayersList({super.key, required this.players});
 
   @override
   State<PlayersList> createState() => _PlayersListState();
@@ -11,7 +13,7 @@ class PlayersList extends StatefulWidget {
 class _PlayersListState extends State<PlayersList> {
   @override
   Widget build(BuildContext context) {
-    final players = PlayerItem.playerList;
+    final players = widget.players;
     if (players.isEmpty) {
       return const Center(
         child: Text('No players available.'),

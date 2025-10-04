@@ -12,6 +12,34 @@ class AllPlayersScreen extends StatefulWidget {
 
 class _AllPlayersScreenState extends State<AllPlayersScreen> {
   final List<PlayerItem> players = PlayerItem.playerList;
+  List<PlayerItem> filteredPlayers = PlayerItem.playerList;
+  final TextEditingController searchController = TextEditingController();
+
+  void searchPlayers() {
+    final query = searchController.text.toLowerCase().trim();
+    setState(() {
+      if (query.isEmpty) {
+        filteredPlayers = players;
+      } else {
+        filteredPlayers = players.where((player) {
+          return player.nickname.toLowerCase().contains(query) ||
+              player.fullName.toLowerCase().contains(query);
+        }).toList();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    filteredPlayers = players;
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +69,10 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
                   builder: (context) => AddPlayerScreen(),
                 ),
               );
-              setState(() {}); // Refresh the list
+              setState(() {
+                filteredPlayers = players; // Reset to show all players
+                searchController.clear(); // Clear search field
+              });
             },
           ),
         ],
@@ -50,61 +81,38 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search player...',
-                      prefixIcon: const Icon(Icons.search),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 16,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Colors.blueAccent,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                    enabled: true,
+            child: TextField(
+              controller: searchController,
+              onChanged: (value) => searchPlayers(),
+              decoration: InputDecoration(
+                hintText: 'Search player...',
+                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.grey[100],
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 16,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.blueAccent,
+                    width: 1.5,
                   ),
                 ),
-                const SizedBox(width: 8),
-                SizedBox(
-                  width: 60,
-                  height: 40,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple[80],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    onPressed: () {}, // No function yet
-                    child: const Icon(
-                      Icons.search,
-                      color: Colors.deepPurple,
-                    ),
-                  ),
-                ),
-              ],
+              ),
+              enabled: true,
             ),
           ),
-          const Expanded(child: PlayersList()),
+          Expanded(child: PlayersList(players: filteredPlayers)),
         ],
       ),
     );
