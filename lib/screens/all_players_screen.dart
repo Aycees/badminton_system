@@ -36,7 +36,6 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
       searchPlayers(); // Refresh the filtered list
     });
 
-    // Show a snackbar confirmation
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('${player.nickname} has been deleted'),
