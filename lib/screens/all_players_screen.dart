@@ -77,6 +77,7 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.deepPurple[100],
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -114,6 +114,7 @@ class _AllGamesScreenState extends State<AllGamesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.deepPurple[100],
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,

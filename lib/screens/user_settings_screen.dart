@@ -55,10 +55,9 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
         const SnackBar(
           content: Text('Settings saved successfully'),
           duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
         ),
       );
-
-      Navigator.pop(context);
     }
   }
 
@@ -66,7 +65,15 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Settings'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.deepPurple[100],
+        title: const Text(
+          'User Settings',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -163,6 +170,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
               ElevatedButton(
                 onPressed: saveSettings,
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple[50],
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 child: const Text(
@@ -175,7 +183,23 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
               // Cancel Button
               OutlinedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  // Reset form to original values
+                  setState(() {
+                    courtNameController.text = settings.defaultCourtName;
+                    courtRateController.text = settings.defaultCourtRate
+                        .toString();
+                    shuttleCockPriceController.text = settings
+                        .defaultShuttleCockPrice
+                        .toString();
+                    divideCourtEqually = settings.divideCourtEqually;
+                  });
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Changes cancelled'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),

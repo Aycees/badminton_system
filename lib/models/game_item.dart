@@ -18,6 +18,7 @@ class GameItem {
   final double shuttleCockPrice;
   final bool divideCourtEqually;
   int numberOfPlayers;
+  List<String> selectedPlayerNicknames; // Store player nicknames
 
   GameItem({
     required this.gameTitle,
@@ -27,7 +28,8 @@ class GameItem {
     required this.shuttleCockPrice,
     required this.divideCourtEqually,
     this.numberOfPlayers = 0,
-  });
+    List<String>? selectedPlayerNicknames,
+  }) : selectedPlayerNicknames = selectedPlayerNicknames ?? [];
 
   // Calculate total hours for all schedules
   double getTotalHours() {
