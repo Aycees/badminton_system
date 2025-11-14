@@ -40,6 +40,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
     super.dispose();
   }
 
+  /// Validates and saves the user settings with updated default values
   void saveSettings() {
     if (_formKey.currentState!.validate()) {
       setState(() {

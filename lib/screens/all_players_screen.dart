@@ -16,6 +16,7 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
   List<PlayerItem> filteredPlayers = PlayerItem.playerList;
   final TextEditingController searchController = TextEditingController();
 
+  /// Filters the players list based on the search query matching nickname or full name
   void searchPlayers() {
     final query = searchController.text.toLowerCase().trim();
     setState(() {
@@ -30,6 +31,7 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
     });
   }
 
+  /// Deletes a player from the list and shows a confirmation message
   void deletePlayer(PlayerItem player) {
     setState(() {
       players.remove(player);
@@ -44,6 +46,7 @@ class _AllPlayersScreenState extends State<AllPlayersScreen> {
     );
   }
 
+  /// Navigates to the edit player screen with the selected player
   void editPlayer(PlayerItem player) async {
     await Navigator.push(
       context,

@@ -89,6 +89,7 @@ class _EditPlayerFormState extends State<EditPlayerForm> {
     super.dispose();
   }
 
+  /// Converts a level string back to its corresponding slider value
   double getLevelValue(String levelString) {
     // Convert level string back to slider value
     for (int i = 0; i < badmintonLevels.length; i++) {
@@ -114,6 +115,7 @@ class _EditPlayerFormState extends State<EditPlayerForm> {
     return 0.0; // Default to first level if not found
   }
 
+  /// Converts a slider value to its corresponding badminton level label with mark
   String getLevelLabel(double value) {
     int idx = value ~/ 3;
     int markIdx = value % 3 == 0
@@ -128,6 +130,7 @@ class _EditPlayerFormState extends State<EditPlayerForm> {
     return '${level['label']} (${marks[markIdx]})';
   }
 
+  /// Validates all form fields and returns true if all fields are valid
   bool validateFields() {
     bool valid = true;
     setState(() {
@@ -161,6 +164,7 @@ class _EditPlayerFormState extends State<EditPlayerForm> {
     return valid;
   }
 
+  /// Updates the player with new information and saves to the player list
   void updatePlayer() {
     if (validateFields()) {
       final updatedPlayer = PlayerItem(
@@ -191,6 +195,7 @@ class _EditPlayerFormState extends State<EditPlayerForm> {
     }
   }
 
+  /// Shows a confirmation dialog and deletes the player if confirmed
   Future<void> deletePlayer() async {
     final bool? shouldDelete = await showDialog<bool>(
       context: context,

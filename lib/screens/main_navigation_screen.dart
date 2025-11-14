@@ -20,6 +20,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     const UserSettingsScreen(),
   ];
 
+  /// Updates the current screen index when a bottom navigation tab is tapped
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;

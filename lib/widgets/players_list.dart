@@ -18,6 +18,7 @@ class PlayersList extends StatefulWidget {
 }
 
 class _PlayersListState extends State<PlayersList> {
+  /// Shows a confirmation dialog before deleting a player
   Future<void> _showDeleteConfirmation(PlayerItem player) async {
     final bool? shouldDelete = await showDialog<bool>(
       context: context,

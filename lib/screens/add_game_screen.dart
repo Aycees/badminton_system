@@ -47,6 +47,7 @@ class _AddGameScreenState extends State<AddGameScreen> {
     super.dispose();
   }
 
+  /// Opens a dialog to add a new court schedule to the game
   void addSchedule() async {
     // Show dialog to add court schedule
     await showDialog(
@@ -63,12 +64,14 @@ class _AddGameScreenState extends State<AddGameScreen> {
     );
   }
 
+  /// Removes a schedule from the list at the specified index
   void removeSchedule(int index) {
     setState(() {
       schedules.removeAt(index);
     });
   }
 
+  /// Validates form, creates a new game with all details, and saves it to the game list
   void saveGame() {
     if (_formKey.currentState!.validate()) {
       if (schedules.isEmpty) {
@@ -325,6 +328,7 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
     super.dispose();
   }
 
+  /// Selects a date for the court schedule
   Future<void> selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -339,6 +343,7 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
     }
   }
 
+  /// Shows time picker to select the start time for the schedule
   Future<void> selectStartTime() async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -351,6 +356,7 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
     }
   }
 
+  /// Shows time picker to select the end time for the schedule
   Future<void> selectEndTime() async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -363,6 +369,7 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
     }
   }
 
+  /// Validates the schedule form and adds the schedule to the callback
   void addSchedule() {
     if (_formKey.currentState!.validate()) {
       final startDateTime = DateTime(

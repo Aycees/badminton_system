@@ -49,6 +49,7 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
   final TextEditingController remarksController = TextEditingController();
   final _error = <String, String?>{};
 
+  /// Converts a slider value to its corresponding badminton level label with mark
   String getLevelLabel(double value) {
     int idx = value ~/ 3;
     int markIdx = value % 3 == 0
@@ -66,6 +67,7 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
   @override
   Widget build(BuildContext context) {
     // Function to save a new player
+    /// Saves a new player with the provided details to the player list
     void savePlayer({
       required String nickname,
       required String fullName,
@@ -89,6 +91,7 @@ class _AddPlayerFormState extends State<AddPlayerForm> {
       PlayerItem.playerList.add(newPlayer);
     }
 
+    /// Validates all form fields and returns true if all fields are valid
     bool validateFields() {
       bool valid = true;
       setState(() {

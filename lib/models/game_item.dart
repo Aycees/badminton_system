@@ -18,7 +18,7 @@ class GameItem {
   final double shuttleCockPrice;
   final bool divideCourtEqually;
   int numberOfPlayers;
-  List<String> selectedPlayerNicknames; // Store player nicknames
+  List<String> selectedPlayerNicknames;
 
   GameItem({
     required this.gameTitle,
@@ -31,7 +31,7 @@ class GameItem {
     List<String>? selectedPlayerNicknames,
   }) : selectedPlayerNicknames = selectedPlayerNicknames ?? [];
 
-  // Calculate total hours for all schedules
+  /// Calculates and returns the total hours across all scheduled court sessions
   double getTotalHours() {
     double totalHours = 0;
     for (var schedule in schedules) {
@@ -41,7 +41,7 @@ class GameItem {
     return totalHours;
   }
 
-  // Calculate total cost
+  /// Calculates and returns the total cost including court rental and shuttle cock expenses
   double getTotalCost() {
     final totalHours = getTotalHours();
     final courtCost = totalHours * courtRate;

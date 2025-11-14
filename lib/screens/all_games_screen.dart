@@ -28,6 +28,7 @@ class _AllGamesScreenState extends State<AllGamesScreen> {
     super.dispose();
   }
 
+  /// Filters the games list based on the search query matching game title or scheduled date
   void searchGames() {
     final query = searchController.text.toLowerCase().trim();
     setState(() {
@@ -52,6 +53,7 @@ class _AllGamesScreenState extends State<AllGamesScreen> {
     });
   }
 
+  /// Shows a confirmation dialog and deletes the game if confirmed
   void deleteGame(GameItem game) {
     // Show confirmation dialog
     showDialog(
@@ -95,6 +97,7 @@ class _AllGamesScreenState extends State<AllGamesScreen> {
     );
   }
 
+  /// Navigates to the view game screen to display full game details
   void viewGame(GameItem game) async {
     await Navigator.push(
       context,

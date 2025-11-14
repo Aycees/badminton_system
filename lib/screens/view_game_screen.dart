@@ -27,6 +27,7 @@ class _ViewGameScreenState extends State<ViewGameScreen> {
     numberOfPlayers = widget.game.numberOfPlayers;
   }
 
+  /// Updates the number of players for the game
   void updatePlayerCount(int count) {
     setState(() {
       numberOfPlayers = count;
@@ -34,6 +35,7 @@ class _ViewGameScreenState extends State<ViewGameScreen> {
     });
   }
 
+  /// Navigates to the select players screen to add or modify players for this game
   void navigateToSelectPlayers() {
     Navigator.push(
       context,
@@ -53,6 +55,7 @@ class _ViewGameScreenState extends State<ViewGameScreen> {
     );
   }
 
+  /// Shows a confirmation dialog and deletes the game if confirmed
   void deleteGame() {
     showDialog(
       context: context,
@@ -450,6 +453,7 @@ class _ViewGameScreenState extends State<ViewGameScreen> {
     );
   }
 
+  /// Helper widget to build a row displaying a label and value pair
   Widget _buildInfoRow(
     String label,
     String value, {

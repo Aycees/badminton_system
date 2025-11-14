@@ -24,6 +24,7 @@ class _SelectPlayersScreenState extends State<SelectPlayersScreen> {
     tempSelectedPlayers = List.from(widget.selectedPlayerNicknames);
   }
 
+  /// Toggles the selection state of a player by nickname
   void togglePlayerSelection(String nickname) {
     setState(() {
       if (tempSelectedPlayers.contains(nickname)) {
@@ -34,6 +35,7 @@ class _SelectPlayersScreenState extends State<SelectPlayersScreen> {
     });
   }
 
+  /// Saves the selected players and returns to the previous screen
   void saveSelection() {
     widget.onPlayersSelected(tempSelectedPlayers);
     Navigator.pop(context);
