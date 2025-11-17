@@ -21,6 +21,7 @@ class _AddGameScreenState extends State<AddGameScreen> {
   late bool divideCourtEqually;
 
   List<CourtSchedule> schedules = [];
+  String? scheduleValidationError;
 
   @override
   void initState() {
@@ -54,9 +55,13 @@ class _AddGameScreenState extends State<AddGameScreen> {
       context: context,
       builder: (BuildContext context) {
         return AddScheduleDialog(
+          existingSchedules: schedules,
           onScheduleAdded: (schedule) {
             setState(() {
               schedules.add(schedule);
+              scheduleValidationError = null;
+              // Revalidate form when schedule is added
+              _formKey.currentState?.validate();
             });
           },
         );
@@ -68,33 +73,24 @@ class _AddGameScreenState extends State<AddGameScreen> {
   void removeSchedule(int index) {
     setState(() {
       schedules.removeAt(index);
+      // Revalidate form when schedule is removed
+      _formKey.currentState?.validate();
     });
   }
 
   /// Validates form, creates a new game with all details, and saves it to the game list
   void saveGame() {
+    // Clear previous schedule validation error
+    setState(() {
+      scheduleValidationError = null;
+    });
+
     if (_formKey.currentState!.validate()) {
-      if (schedules.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please add at least one schedule'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        return;
-      }
-
-      // If game title is blank, use the first scheduled date as title
-      String finalGameTitle = gameTitleController.text.trim();
-      if (finalGameTitle.isEmpty) {
-        finalGameTitle = DateFormat(
-          'MMM dd, yyyy',
-        ).format(schedules.first.startTime);
-      }
-
       final newGame = GameItem(
-        gameTitle: finalGameTitle,
-        courtName: courtNameController.text,
+        gameTitle: gameTitleController.text.trim().isEmpty
+            ? DateFormat('MMM dd, yyyy').format(schedules.first.startTime)
+            : gameTitleController.text.trim(),
+        courtName: courtNameController.text.trim(),
         schedules: schedules,
         courtRate: double.parse(courtRateController.text),
         shuttleCockPrice: double.parse(shuttleCockPriceController.text),
@@ -111,7 +107,55 @@ class _AddGameScreenState extends State<AddGameScreen> {
       );
 
       Navigator.pop(context);
+    } else {
+      // Scroll to show error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fix the errors before saving'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.orange,
+        ),
+      );
     }
+  }
+
+  /// Validates that the court name and schedules don't conflict with existing games
+  String? _validateCourtNameAndSchedules(String? courtName) {
+    if (courtName == null || courtName.trim().isEmpty) {
+      return null; // Let the empty validator handle this
+    }
+
+    if (schedules.isEmpty) {
+      scheduleValidationError = 'Please add at least one schedule';
+      return null; // Return null here, error shown in schedules section
+    }
+
+    // Check for schedule conflicts with existing games
+    for (final existingGame in GameItem.gameList) {
+      if (existingGame.courtName.toLowerCase() ==
+          courtName.trim().toLowerCase()) {
+        for (final newSchedule in schedules) {
+          for (final existingSchedule in existingGame.schedules) {
+            if (newSchedule.courtNumber == existingSchedule.courtNumber) {
+              final newStart = newSchedule.startTime;
+              final newEnd = newSchedule.endTime;
+              final existingStart = existingSchedule.startTime;
+              final existingEnd = existingSchedule.endTime;
+
+              if (!(newEnd.isBefore(existingStart) ||
+                      newEnd.isAtSameMomentAs(existingStart)) &&
+                  !(newStart.isAfter(existingEnd) ||
+                      newStart.isAtSameMomentAs(existingEnd))) {
+                return 'Court ${newSchedule.courtNumber} is already booked at ${DateFormat('MMM dd, hh:mm a').format(newStart)} (Game: "${existingGame.gameTitle}")';
+              }
+            }
+          }
+        }
+      }
+    }
+
+    scheduleValidationError = null;
+    return null;
   }
 
   @override
@@ -124,6 +168,7 @@ class _AddGameScreenState extends State<AddGameScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
               // Game Title
@@ -146,10 +191,17 @@ class _AddGameScreenState extends State<AddGameScreen> {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return 'Please enter a court name';
                   }
-                  return null;
+                  // Check for conflicts
+                  return _validateCourtNameAndSchedules(value);
+                },
+                onChanged: (value) {
+                  // Revalidate when court name changes
+                  if (schedules.isNotEmpty) {
+                    _formKey.currentState?.validate();
+                  }
                 },
               ),
               const SizedBox(height: 16),
@@ -219,34 +271,57 @@ class _AddGameScreenState extends State<AddGameScreen> {
               const SizedBox(height: 16),
 
               // Schedules Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Schedules',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Schedules',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: addSchedule,
+                        icon: const Icon(Icons.add),
+                        label: const Text('Add Schedule'),
+                      ),
+                    ],
+                  ),
+                  if (scheduleValidationError != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        scheduleValidationError!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: addSchedule,
-                    icon: const Icon(Icons.add),
-                    label: const Text('Add Schedule'),
-                  ),
                 ],
               ),
               const SizedBox(height: 8),
 
               // Display schedules
               if (schedules.isEmpty)
-                const Card(
+                Card(
+                  color: scheduleValidationError != null
+                      ? Colors.red[50]
+                      : null,
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'No schedules added yet',
+                      scheduleValidationError ?? 'No schedules added yet',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: scheduleValidationError != null
+                            ? Theme.of(context).colorScheme.error
+                            : Colors.grey,
+                      ),
                     ),
                   ),
                 )
@@ -308,8 +383,13 @@ class _AddGameScreenState extends State<AddGameScreen> {
 // Dialog to add a schedule
 class AddScheduleDialog extends StatefulWidget {
   final Function(CourtSchedule) onScheduleAdded;
+  final List<CourtSchedule> existingSchedules;
 
-  const AddScheduleDialog({super.key, required this.onScheduleAdded});
+  const AddScheduleDialog({
+    super.key,
+    required this.onScheduleAdded,
+    required this.existingSchedules,
+  });
 
   @override
   State<AddScheduleDialog> createState() => _AddScheduleDialogState();
@@ -394,13 +474,38 @@ class _AddScheduleDialogState extends State<AddScheduleDialog> {
           const SnackBar(
             content: Text('End time must be after start time'),
             duration: Duration(seconds: 2),
+            backgroundColor: Colors.red,
           ),
         );
         return;
       }
 
+      final courtNumber = int.parse(courtNumberController.text);
+
+      // Check for duplicate schedules within the same game
+      for (final existingSchedule in widget.existingSchedules) {
+        if (existingSchedule.courtNumber == courtNumber) {
+          // Check if schedules overlap
+          if (!(endDateTime.isBefore(existingSchedule.startTime) ||
+                  endDateTime.isAtSameMomentAs(existingSchedule.startTime)) &&
+              !(startDateTime.isAfter(existingSchedule.endTime) ||
+                  startDateTime.isAtSameMomentAs(existingSchedule.endTime))) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Court $courtNumber already has a booking at this time',
+                ),
+                duration: const Duration(seconds: 3),
+                backgroundColor: Colors.red,
+              ),
+            );
+            return;
+          }
+        }
+      }
+
       final schedule = CourtSchedule(
-        courtNumber: int.parse(courtNumberController.text),
+        courtNumber: courtNumber,
         startTime: startDateTime,
         endTime: endDateTime,
       );

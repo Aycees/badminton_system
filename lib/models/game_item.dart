@@ -11,25 +11,31 @@ class CourtSchedule {
 }
 
 class GameItem {
-  final String gameTitle;
-  final String courtName;
-  final List<CourtSchedule> schedules;
-  final double courtRate;
-  final double shuttleCockPrice;
-  final bool divideCourtEqually;
+  String gameTitle;
+  String courtName;
+  double courtRate;
+  double shuttleCockPrice;
+  bool divideCourtEqually;
+  List<CourtSchedule> schedules;
   int numberOfPlayers;
   List<String> selectedPlayerNicknames;
+  bool divideShuttleCockEqually;
+  String? shuttleCockPayerNickname;
+  List<String> courtPayerNicknames;
 
   GameItem({
     required this.gameTitle,
     required this.courtName,
-    required this.schedules,
     required this.courtRate,
     required this.shuttleCockPrice,
-    required this.divideCourtEqually,
+    this.divideCourtEqually = true,
+    required this.schedules,
     this.numberOfPlayers = 0,
-    List<String>? selectedPlayerNicknames,
-  }) : selectedPlayerNicknames = selectedPlayerNicknames ?? [];
+    this.selectedPlayerNicknames = const [],
+    this.divideShuttleCockEqually = true,
+    this.shuttleCockPayerNickname,
+    this.courtPayerNicknames = const [],
+  });
 
   /// Calculates and returns the total hours across all scheduled court sessions
   double getTotalHours() {
